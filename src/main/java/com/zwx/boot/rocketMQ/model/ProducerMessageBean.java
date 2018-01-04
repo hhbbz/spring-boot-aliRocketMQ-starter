@@ -1,4 +1,4 @@
-package com.zwx.boot.model;
+package com.zwx.boot.rocketMQ.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Accessors(chain = true)
 @Data
-public class ProducerMessage<T>{
+public class ProducerMessageBean<T>{
 
     private Long id;
 
@@ -49,9 +49,4 @@ public class ProducerMessage<T>{
     private String state;
 
     private Date runDate;
-
-    private Date createDate;
-    private Date updateDate;
-    private String createBy;
-    private String updateBy;
 }

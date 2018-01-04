@@ -1,9 +1,8 @@
-package com.zwx.boot.tools;
+package com.zwx.boot.rocketMQ.tools;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.Map;
  * Created by hhbbz on 2017/11/22.
  * @Explain: 操作spring容器里面的bean和生命周期
  */
-@Component
 public class ApplicationContextProvider implements ApplicationContextAware {
     /**
      * 上下文对象实例

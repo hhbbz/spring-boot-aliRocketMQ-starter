@@ -1,11 +1,12 @@
-package com.zwx.boot.consumer;
+package com.zwx.boot.rocketMQ.consumer;
 
 import com.aliyun.openservices.ons.api.ONSFactory;
 import com.aliyun.openservices.ons.api.PropertyKeyConst;
 import com.aliyun.openservices.ons.api.order.OrderConsumer;
-import com.zwx.boot.config.MQConfig;
-import com.zwx.boot.tools.ApplicationContextProvider;
+import com.zwx.boot.rocketMQ.config.MQConfig;
+import com.zwx.boot.rocketMQ.tools.ApplicationContextProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Properties;
@@ -14,7 +15,7 @@ import java.util.Properties;
  * Created by hhbbz on 2017/11/14.
  * @Explain: 初始化Consumer
  */
-
+@Configurable
 public class ConsumerHelper {
 
     @Autowired
@@ -24,8 +25,8 @@ public class ConsumerHelper {
     /**
      * Initialize consumer
      */
-    @Bean("consumer")
-    public OrderConsumer consumer() {
+    @Bean("orderConsumer")
+    public OrderConsumer orderConsumer() {
         OrderConsumer consumer;
         Properties properties = new Properties();
         properties.put(PropertyKeyConst.ConsumerId, mqConfig.getConsumerId());
@@ -35,6 +36,7 @@ public class ConsumerHelper {
         consumer = ONSFactory.createOrderedConsumer(properties);
         consumer.subscribe(mqConfig.getTopic(), mqConfig.getTag(), consumerHandler);
         consumer.start();
+        System.out.println("consumer start。。。");
         return consumer;
     }
 

@@ -1,4 +1,4 @@
-package com.zwx.boot.common;
+package com.zwx.boot.rocketMQ.common;
 /**
  * Created by hhbbz on 2017/11/9.
  * @Explain: mq相关

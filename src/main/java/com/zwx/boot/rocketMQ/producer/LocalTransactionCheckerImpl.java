@@ -1,4 +1,4 @@
-package com.zwx.boot.producer;
+package com.zwx.boot.rocketMQ.producer;
 
 import com.aliyun.openservices.ons.api.Message;
 import com.aliyun.openservices.ons.api.transaction.LocalTransactionChecker;

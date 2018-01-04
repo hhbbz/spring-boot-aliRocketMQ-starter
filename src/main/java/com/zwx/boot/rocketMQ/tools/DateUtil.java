@@ -1,4 +1,4 @@
-package com.zwx.boot.tools;
+package com.zwx.boot.rocketMQ.tools;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

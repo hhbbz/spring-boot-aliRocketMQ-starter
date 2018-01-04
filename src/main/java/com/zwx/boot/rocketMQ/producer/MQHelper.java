@@ -1,14 +1,15 @@
-package com.zwx.boot.producer;
+package com.zwx.boot.rocketMQ.producer;
 
 import com.aliyun.openservices.ons.api.Message;
 import com.aliyun.openservices.ons.api.SendResult;
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSON;
-import com.zwx.boot.common.RocketMQServiceConstant;
-import com.zwx.boot.model.ProducerMessage;
-import com.zwx.boot.tools.AssertValue;
-import com.zwx.boot.tools.DateUtil;
+import com.zwx.boot.rocketMQ.common.RocketMQServiceConstant;
+import com.zwx.boot.rocketMQ.model.ProducerMessageBean;
+import com.zwx.boot.rocketMQ.tools.DateUtil;
+import com.zwx.boot.rocketMQ.tools.AssertValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -18,16 +19,17 @@ import java.text.ParseException;
  * @Explain: 生成消息和选择消息发送方式
  */
 @Component
-public class MQHelper {
+public class MQHelper<T> {
     private static final Logger logger = LoggerFactory.getLogger(ProducerHelper.class);
-    private static ProducerHelper producerHelper = new ProducerHelper();
+    @Autowired
+    private ProducerHelper producerHelper;
     /**
      * 生成消息体
      *
      * @param producerMessage
      * @return
      */
-    public static Message generateMessage(ProducerMessage producerMessage) throws ParseException {
+    public Message generateMessage(ProducerMessageBean<T> producerMessage) throws ParseException {
         Message msg = new Message();
         msg.setTag(producerMessage.getTags());
         msg.setKey(producerMessage.getKey());
@@ -82,7 +84,7 @@ public class MQHelper {
      * @param producerMessage
      * @return
      */
-    public static SendResult sendMessage(Message message, ProducerMessage producerMessage) {
+    public SendResult sendMessage(Message message, ProducerMessageBean<T> producerMessage) {
         SendResult sendResult = null;
         if (!AssertValue.isNotEmpty(producerMessage.getMethod())) {
             producerMessage.setMethod(RocketMQServiceConstant.SYNCHRONOUS_MESSAGE);

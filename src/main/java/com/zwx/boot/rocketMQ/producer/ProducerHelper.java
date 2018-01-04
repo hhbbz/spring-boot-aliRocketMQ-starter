@@ -1,4 +1,4 @@
-package com.zwx.boot.producer;
+package com.zwx.boot.rocketMQ.producer;
 
 import com.aliyun.openservices.ons.api.*;
 import com.aliyun.openservices.ons.api.exception.ONSClientException;
@@ -7,11 +7,12 @@ import com.aliyun.openservices.ons.api.transaction.LocalTransactionExecuter;
 import com.aliyun.openservices.ons.api.transaction.TransactionProducer;
 import com.aliyun.openservices.ons.api.transaction.TransactionStatus;
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSON;
-import com.zwx.boot.config.MQConfig;
-import com.zwx.boot.tools.HashUtil;
+import com.zwx.boot.rocketMQ.config.MQConfig;
+import com.zwx.boot.rocketMQ.tools.HashUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -30,20 +31,24 @@ public class ProducerHelper {
     @Autowired
     private MQConfig mqConfig;
 
-    private static Producer producer;
+    @Autowired
+    @Qualifier("producer")
+    private Producer producer;
+    @Autowired
+    @Qualifier("orderProducer")
+    private OrderProducer orderProducer;
+    @Autowired
+    @Qualifier("tranProducer")
+    private TransactionProducer transactionProducer;
 
-    private static OrderProducer orderProducer;
 
-    private static TransactionProducer transactionProducer;
-
-    Properties properties = new Properties();
 
 
     @Bean("producer")
     public Producer producer(){
         long startTimestamp = System.currentTimeMillis();
         logger.info("Producer 开始初始化");
-
+        Properties properties = new Properties();
         properties.put(PropertyKeyConst.ProducerId, mqConfig.getProducerId());
         properties.put(PropertyKeyConst.AccessKey, mqConfig.getAccessKey());
         properties.put(PropertyKeyConst.SecretKey, mqConfig.getSecretKey());
@@ -61,7 +66,7 @@ public class ProducerHelper {
     public OrderProducer orderProducer(){
         long startTimestamp = System.currentTimeMillis();
         logger.info("orderProducer 开始初始化");
-
+        Properties properties = new Properties();
         properties.put(PropertyKeyConst.ProducerId, mqConfig.getProducerId());
         properties.put(PropertyKeyConst.AccessKey, mqConfig.getAccessKey());
         properties.put(PropertyKeyConst.SecretKey, mqConfig.getSecretKey());
@@ -79,7 +84,7 @@ public class ProducerHelper {
     public TransactionProducer transactionProducer(){
         long startTimestamp = System.currentTimeMillis();
         logger.info("transactionProducer 开始初始化");
-
+        Properties properties = new Properties();
         properties.put(PropertyKeyConst.ProducerId, mqConfig.getProducerId());
         properties.put(PropertyKeyConst.AccessKey, mqConfig.getAccessKey());
         properties.put(PropertyKeyConst.SecretKey, mqConfig.getSecretKey());

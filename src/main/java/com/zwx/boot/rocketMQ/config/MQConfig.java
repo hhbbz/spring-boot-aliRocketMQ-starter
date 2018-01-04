@@ -1,4 +1,4 @@
-package com.zwx.boot.config;
+package com.zwx.boot.rocketMQ.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

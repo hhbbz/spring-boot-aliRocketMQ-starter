@@ -1,4 +1,4 @@
-package com.zwx.boot.tools;
+package com.zwx.boot.rocketMQ.tools;
 
 
 import java.util.Collection;
