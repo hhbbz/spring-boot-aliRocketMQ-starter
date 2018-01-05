@@ -4,10 +4,11 @@ import com.aliyun.openservices.ons.api.ONSFactory;
 import com.aliyun.openservices.ons.api.PropertyKeyConst;
 import com.aliyun.openservices.ons.api.order.OrderConsumer;
 import com.zwx.boot.rocketMQ.config.MQConfig;
-import com.zwx.boot.rocketMQ.tools.ApplicationContextProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.util.Properties;
 
@@ -15,29 +16,28 @@ import java.util.Properties;
  * Created by hhbbz on 2017/11/14.
  * @Explain: 初始化Consumer
  */
-@Configurable
+@Component
 public class ConsumerHelper {
-
+    private static final Logger logger = LoggerFactory.getLogger(ConsumerHelper.class);
     @Autowired
     private MQConfig mqConfig;
-    @Autowired
-    private ApplicationContextProvider applicationContextProvider;
+
     /**
      * Initialize consumer
      */
     @Bean("orderConsumer")
     public OrderConsumer orderConsumer() {
-        OrderConsumer consumer;
+        OrderConsumer orderConsumer;
+        long startTimestamp = System.currentTimeMillis();
+        logger.info("orderConsumer 开始初始化");
         Properties properties = new Properties();
         properties.put(PropertyKeyConst.ConsumerId, mqConfig.getConsumerId());
         properties.put(PropertyKeyConst.AccessKey, mqConfig.getAccessKey());
         properties.put(PropertyKeyConst.SecretKey, mqConfig.getSecretKey());
-        ConsumerHandler consumerHandler = (ConsumerHandler) applicationContextProvider.getBean("consumerHandler");
-        consumer = ONSFactory.createOrderedConsumer(properties);
-        consumer.subscribe(mqConfig.getTopic(), mqConfig.getTag(), consumerHandler);
-        consumer.start();
-        System.out.println("consumer start。。。");
-        return consumer;
+        orderConsumer = ONSFactory.createOrderedConsumer(properties);
+        long costTime = System.currentTimeMillis() - startTimestamp;
+        logger.info("orderConsumer 初始化成功 耗时 " + costTime + " ms");
+        return orderConsumer;
     }
 
     /**
