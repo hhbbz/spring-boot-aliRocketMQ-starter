@@ -34,6 +34,8 @@ public class ConsumerHelper {
         properties.put(PropertyKeyConst.ConsumerId, mqConfig.getConsumerId());
         properties.put(PropertyKeyConst.AccessKey, mqConfig.getAccessKey());
         properties.put(PropertyKeyConst.SecretKey, mqConfig.getSecretKey());
+        //消息消费失败重试次数
+        properties.put(PropertyKeyConst.MaxReconsumeTimes,"2");
         orderConsumer = ONSFactory.createOrderedConsumer(properties);
         long costTime = System.currentTimeMillis() - startTimestamp;
         logger.info("orderConsumer 初始化成功 耗时 " + costTime + " ms");

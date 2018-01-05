@@ -20,7 +20,7 @@ import java.text.ParseException;
  */
 @Component
 public class MQHelper<T> {
-    private static final Logger logger = LoggerFactory.getLogger(ProducerHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(MQHelper.class);
     @Autowired
     private ProducerHelper producerHelper;
     /**
