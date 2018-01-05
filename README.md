@@ -1,14 +1,17 @@
 # spring-boot-aliRocketMQ-starter
-自己封装的阿里rocketMQ中间件依赖,需要自己上传到maven私服使用，使用方法：
-application.yml中加入
-mq-middle:
-  producerId: PID_*
-  consumerId: CID_*
-  accessKey: *
-  secretKey: *
-  onsAddr: *
-  topic: *
+## 自己封装的阿里rocketMQ中间件依赖,需要自己上传到maven私服使用，使用方法：
+```
+ application.yml中加入
+   mq-config:
+   producerId: PID_*
+   consumerId: CID_*
+   accessKey: *
+   secretKey: *
+   onsAddr: *
+   topic: *
+```
 添加启动类用于初始化消费者：
+```
 @Component
 public class RocketMQRunner implements CommandLineRunner {
 
@@ -19,7 +22,7 @@ public class RocketMQRunner implements CommandLineRunner {
     @Autowired
     @Qualifier("orderConsumer")
     private OrderConsumer orderConsumer;
-    //消息监听器
+    /**消息监听器**/
     @Autowired
     private ConsumerHandler consumerHandler;
 
@@ -34,18 +37,16 @@ public class RocketMQRunner implements CommandLineRunner {
         orderConsumer.start();
     }
 }
+```
 生产消息：
-@Slf4j
+```
 @Service
-@Transactional(rollbackFor = {RestInternalServerErrorException.class})
 public class SysMessageProducer {
     private static final Logger logger = LoggerFactory.getLogger(SysMessageProducer.class);
     @Autowired
     private MQHelper<SysMessage> mqHelper;
     @Autowired
     private MQConfig mqConfig;
-    @Autowired
-    private IProMessageService proMessageService;
 
     /**
      * 此方法用于在消息中心创建消息后调用推送消息
@@ -74,9 +75,6 @@ public class SysMessageProducer {
                 //发送消息
                 SendResult sendResult = mqHelper.sendMessage(message, producerMessage);
                 logger.info(new Date() + " 发送成功! Topic:" + mqConfig.getTopic() + " msgId: " + sendResult.getMessageId());
-                //保存到定时任务表
-                producerMessage.setMessageId(sendResult.getMessageId());
-                this.proMessageService.insert(producerMessage);
             } catch (Exception e) {
                 e.printStackTrace();
                 logger.error("消息生产失败,将进行两次重试", e.getMessage());
@@ -88,7 +86,9 @@ public class SysMessageProducer {
         }
     }
 }
+```
 监听器消费消息：
+```
 @Component
 public class ConsumerHandler implements MessageOrderListener {
 
@@ -106,4 +106,5 @@ public class ConsumerHandler implements MessageOrderListener {
 
     }
 }
+```
 
